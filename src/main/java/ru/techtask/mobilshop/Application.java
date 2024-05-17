@@ -15,17 +15,13 @@ public class Application extends javafx.application.Application {
         stage.setTitle("PhoneBase!");
         stage.setScene(scene);
         stage.show();
-        dataBaseInit();
     }
 
     public static void main(String[] args) {
         launch();
     }
 
-    public static void dataBaseInit() {
-        String baseURL = "jdbc:postgresql://localhost:5432/postgres";
-        String baseUser = "postgres";
-        String basePassword = "postgres";
+    public static void dataBaseInit(String baseURL, String baseUser, String basePassword) {
         var dataBase = DataBaseController.getInstance();
         dataBase.init(baseURL, baseUser, basePassword);
         dataBase.fillData("ru/techtask/mobilshop/schema.sql");
