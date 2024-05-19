@@ -4,6 +4,8 @@ import lombok.Getter;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -63,4 +65,19 @@ public class DataBaseController {
         return result;
     }
 
+    public List<String> listQuery(String queryString) {
+        var result = new ArrayList<String>();
+        try {
+            Connection connection = DriverManager.getConnection(url, props);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(queryString);
+            while (resultSet.next()) {
+                result.add(resultSet.getString(1));
+            }
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 }

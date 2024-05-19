@@ -102,7 +102,60 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="369.0" layoutY="117.0" minWidth="60.0" mnemonicParsing="false" text="Update" />
+                        <Button layoutX="189.0" layoutY="280.0" minWidth="60.0" mnemonicParsing="false" onAction="#onUpdatePhoneButtonClick" text="Update" />
+                        <Label layoutX="10.0" layoutY="10.0" text="Update phone">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="15.0" layoutY="34.0" text="Choice" />
+                        <ChoiceBox fx:id="updateChoicePhone" layoutX="56.0" layoutY="30.0" prefWidth="150.0" />
+                        <Button layoutX="214.0" layoutY="30.0" mnemonicParsing="false" onAction="#onUpdateChoicePhoneButtonClick" text="Get" />
+                        <Label layoutX="15.0" layoutY="74.0" text="Name Phone" />
+                        <Label layoutX="15.0" layoutY="104.0" text="Processor" />
+                        <Label layoutX="15.0" layoutY="134.0" text="Memory size" />
+                        <Label layoutX="15.0" layoutY="164.0" text="Display" />
+                        <Label layoutX="15.0" layoutY="194.0" text="Camera" />
+                        <Label layoutX="15.0" layoutY="224.0" text="Size" />
+                        <Label layoutX="15.0" layoutY="254.0" text="Price" />
+                        <TextField fx:id="updatePhoneName" layoutX="100.0" layoutY="70.0" />
+                        <TextField fx:id="updatePhoneMemory" layoutX="100.0" layoutY="130.0" />
+                        <TextField fx:id="updatePhoneDisplay" layoutX="100.0" layoutY="160.0" />
+                        <TextField fx:id="updatePhoneCamera" layoutX="100.0" layoutY="190.0" />
+                        <TextField fx:id="updatePhoneSize" layoutX="100.0" layoutY="220.0" />
+                        <TextField fx:id="updatePhonePrice" layoutX="100.0" layoutY="250.0" />
+                        <ChoiceBox fx:id="updatePhoneProcessor" layoutX="100.0" layoutY="100.0" prefWidth="149.0" />
+                        <Label fx:id="updatePhoneId" layoutX="15.0" layoutY="284.0" opacity="0.0" />
+                        <Label layoutX="275.0" layoutY="10.0" text="Update processor">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="updateProcessor" layoutX="330.0" layoutY="70.0" prefWidth="149.0" />
+                        <Button layoutX="485.0" layoutY="70.0" mnemonicParsing="false" onAction="#onUpdateProcessorButtonClick" text="Update" />
+                        <Label layoutX="280.0" layoutY="74.0" text="Series" />
+                        <Label layoutX="280.0" layoutY="34.0" text="Choice" />
+                        <ChoiceBox fx:id="updateChoiceProcessor" layoutX="330.0" layoutY="30.0" prefWidth="149.0" />
+                        <Button layoutX="485.0" layoutY="30.0" mnemonicParsing="false" onAction="#onUpdateChoiceProcessorButtonClick" text="Get" />
+                        <Label fx:id="updateProcessorId" layoutX="530.0" layoutY="34.0" opacity="0.0" />
+                        <Label layoutX="275.0" layoutY="130.0" text="Update transaction">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="280.0" layoutY="156.0" text="Choice" />
+                        <ChoiceBox fx:id="updateChoiceTransaction" layoutX="330.0" layoutY="150.0" prefWidth="149.0" />
+                        <Button layoutX="485.0" layoutY="150.0" mnemonicParsing="false" onAction="#onUpdateChoiceTransactionButtonClick" text="Get" />
+                        <Label layoutX="280.0" layoutY="194.0" text="Phone" />
+                        <Label layoutX="280.0" layoutY="224.0" text="Amount" />
+                        <Label layoutX="280.0" layoutY="254.0" text="Status" />
+                        <ChoiceBox fx:id="updateTransactionPhone" layoutX="330.0" layoutY="190.0" prefWidth="149.0" />
+                        <TextField fx:id="updateTransactionAmount" layoutX="330.0" layoutY="220.0" />
+                        <ChoiceBox fx:id="updateTransactionStatus" layoutX="330.0" layoutY="250.0" prefWidth="149.0" />
+                        <Button layoutX="485.0" layoutY="280.0" mnemonicParsing="false" onAction="#onUpdateTransactionButtonClick" text="Update" />
+                        <Label layoutX="280.0" layoutY="284.0" text="Data" />
+                        <TextField fx:id="updateTransactionData" layoutX="330.0" layoutY="280.0" />
+                        <Label fx:id="updateTransactionId" layoutX="530.0" layoutY="156.0" opacity="0.0" />
                      </children>
                   </AnchorPane>
             </content>

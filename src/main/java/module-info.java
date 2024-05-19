@@ -3,6 +3,7 @@ module ru.techtask.mobilshop {
     requires javafx.fxml;
     requires java.sql;
     requires lombok;
+    requires org.slf4j;
 
     opens ru.techtask.mobilshop to javafx.fxml;
     exports ru.techtask.mobilshop;

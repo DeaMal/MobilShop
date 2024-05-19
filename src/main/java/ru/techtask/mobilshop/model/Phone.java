@@ -6,6 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class Phone {
+    Integer id;
     String name;
     Integer processorId;
     Integer memorySize;
