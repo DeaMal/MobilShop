@@ -10,7 +10,14 @@ import java.sql.Timestamp;
 public class Transaction {
     Integer id;
     Integer goodId;
+    String phoneName;
     Integer amount;
     String status;
     Timestamp data;
+
+    @Override
+    public String toString() {
+        return "{id:" + id + ", phoneId:'" + goodId + "', " + "amount:" + amount
+                + ", status:'" + status + "', data:'" + data + "'}";
+    }
 }

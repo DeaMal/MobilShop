@@ -1,5 +1,7 @@
 package ru.techtask.mobilshop.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.techtask.mobilshop.controller.DataBaseController;
 import ru.techtask.mobilshop.model.Transaction;
 
@@ -7,18 +9,20 @@ import java.sql.*;
 import java.util.List;
 
 public class TransactionsImpl implements Transactions {
+    private static final Logger log = LoggerFactory.getLogger(TransactionsImpl.class);
     private final DataBaseController data = DataBaseController.getInstance();
 
     @Override
     public Integer addTransaction(Transaction newTransaction) {
         String queryString = "insert into mobile_shop.transaction(goodid, amount, status) values ("
-                + newTransaction.getGoodId() + ", " + newTransaction.getAmount() + ", '"
-                + newTransaction.getStatus() + "');";
+                + "(SELECT id FROM mobile_shop.phone WHERE name LIKE '" + newTransaction.getPhoneName() + "'), "
+                + newTransaction.getAmount() + ", '" + newTransaction.getStatus() + "');";
+        log.info(queryString);
         return data.makeQuery(queryString);
     }
 
     @Override
-    public List<String> getListTransactions() {
+    public List<String> getListTransactionNames() {
         String queryString ="SELECT concat(mobile_shop.transaction.id, ' ', p.name, '_', "
         + "mobile_shop.transaction.amount, '_', mobile_shop.transaction.status) AS ab FROM mobile_shop.transaction "
         + "JOIN mobile_shop.phone p on p.id = transaction.goodid;";
@@ -28,7 +32,9 @@ public class TransactionsImpl implements Transactions {
     @Override
     public Transaction getTransaction(Integer transactionId) {
         Transaction result = null;
-        String queryString ="SELECT * FROM mobile_shop.transaction WHERE mobile_shop.transaction.id = ?;";
+        String queryString ="SELECT transaction.id AS id, goodid, amount, status, \"Date\", name "
+                + "FROM mobile_shop.transaction JOIN mobile_shop.phone p on p.id = transaction.goodid "
+                + "WHERE mobile_shop.transaction.id = ?;";
         try {
             Connection connection = DriverManager.getConnection(data.getUrl(), data.getProps());
             PreparedStatement preparedStatement = connection.prepareStatement(queryString);
@@ -41,6 +47,7 @@ public class TransactionsImpl implements Transactions {
                         .amount(resultSet.getInt(3))
                         .status(resultSet.getString(4))
                         .data(resultSet.getTimestamp(5))
+                        .phoneName(resultSet.getString(6))
                         .build();
             }
             connection.close();
@@ -52,10 +59,24 @@ public class TransactionsImpl implements Transactions {
 
     @Override
     public Integer updateTransaction(Transaction updateTransaction) {
-        String queryString ="UPDATE mobile_shop.transaction SET goodid = " + updateTransaction.getGoodId()
-                + ", amount = " + updateTransaction.getAmount() + ", status = '" + updateTransaction.getStatus()
+        String queryString ="UPDATE mobile_shop.transaction SET goodid = "
+                + "(SELECT id FROM mobile_shop.phone WHERE name LIKE '" + updateTransaction.getPhoneName()
+                + "'), amount = " + updateTransaction.getAmount() + ", status = '" + updateTransaction.getStatus()
                 + "', \"Date\" = '" + updateTransaction.getData() + "' WHERE mobile_shop.transaction.id = "
                 + updateTransaction.getId() +";";
         return data.makeQuery(queryString);
+    }
+
+    @Override
+    public Integer deleteTransaction(Integer transactionId) {
+        String queryString ="DELETE FROM mobile_shop.transaction WHERE mobile_shop.transaction.id = "
+                + transactionId +";";
+        return data.makeQuery(queryString);
+    }
+
+    @Override
+    public List<Transaction> listTransactions() {
+        String queryString ="SELECT * FROM mobile_shop.transaction;";
+        return data.listTransactionsQuery(queryString);
     }
 }

@@ -1,6 +1,8 @@
 package ru.techtask.mobilshop.controller;
 
 import lombok.Getter;
+import ru.techtask.mobilshop.model.Phone;
+import ru.techtask.mobilshop.model.Transaction;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -76,7 +78,54 @@ public class DataBaseController {
             }
             connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    public List<Phone> listPhonesQuery(String queryString) {
+        var result = new ArrayList<Phone>();
+        try {
+            Connection connection = DriverManager.getConnection(url, props);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(queryString);
+            while (resultSet.next()) {
+                Phone newPhone = Phone.builder()
+                        .id(resultSet.getInt(1))
+                        .name(resultSet.getString(2))
+                        .processorId(resultSet.getInt(3))
+                        .memorySize(resultSet.getInt(4))
+                        .display(resultSet.getString(5))
+                        .camera(resultSet.getString(6))
+                        .size(resultSet.getString(7))
+                        .price(resultSet.getInt(8))
+                        .build();
+                result.add(newPhone);
+            }
+        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    public List<Transaction> listTransactionsQuery(String queryString) {
+        var result = new ArrayList<Transaction>();
+        try {
+            Connection connection = DriverManager.getConnection(url, props);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(queryString);
+            while (resultSet.next()) {
+                Transaction newTransaction = Transaction.builder()
+                        .id(resultSet.getInt(1))
+                        .goodId(resultSet.getInt(2))
+                        .amount(resultSet.getInt(3))
+                        .status(resultSet.getString(4))
+                        .data(resultSet.getTimestamp(5))
+                        .build();
+                result.add(newTransaction);
+            }
+        } catch (SQLException e) {
+//            throw new RuntimeException(e);
         }
         return result;
     }

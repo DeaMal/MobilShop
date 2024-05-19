@@ -11,8 +11,9 @@ public class PhonesImpl implements Phones {
 
     @Override
     public Integer addPhone(Phone newPhone) {
-        String queryString = "insert into mobile_shop.phone values (default, '" + newPhone.getName() + "', "
-                + newPhone.getProcessorId() + ", " + newPhone.getMemorySize() + ", '" + newPhone.getDisplay() +
+        String queryString = "insert into mobile_shop.phone values (default, '" + newPhone.getName()
+                + "', (SELECT id FROM mobile_shop.processors WHERE description LIKE '"
+                + newPhone.getProcessorName() + "'), " + newPhone.getMemorySize() + ", '" + newPhone.getDisplay() +
                 "', '" + newPhone.getCamera() + "', '" + newPhone.getSize() + "', " + newPhone.getPrice() + ")";
         return data.makeQuery(queryString);
     }
@@ -26,7 +27,9 @@ public class PhonesImpl implements Phones {
     @Override
     public Phone getPhone(String findPhone) {
         Phone result = null;
-        String queryString ="SELECT * FROM mobile_shop.phone WHERE mobile_shop.phone.name LIKE ?;";
+        String queryString ="SELECT phone.id AS id, name, processorid, memorysize, display, camera, size, price, "
+                + "description FROM mobile_shop.phone join mobile_shop.processors p on p.id = phone.processorid "
+                + "WHERE mobile_shop.phone.name LIKE ?;";
         try {
             Connection connection = DriverManager.getConnection(data.getUrl(), data.getProps());
             PreparedStatement preparedStatement = connection.prepareStatement(queryString);
@@ -42,6 +45,7 @@ public class PhonesImpl implements Phones {
                         .camera(resultSet.getString(6))
                         .size(resultSet.getString(7))
                         .price(resultSet.getInt(8))
+                        .processorName(resultSet.getString(9))
                         .build();
             }
             connection.close();
@@ -53,11 +57,29 @@ public class PhonesImpl implements Phones {
 
     @Override
     public Integer updatePhone(Phone updatePhone) {
-        String queryString ="UPDATE mobile_shop.phone SET name = '" + updatePhone.getName() + "', processorid = "
-                + updatePhone.getProcessorId() + ", memorysize = " + updatePhone.getMemorySize() + ", display = '"
+        String queryString ="UPDATE mobile_shop.phone SET name = '" + updatePhone.getName()
+                + "', processorid = (SELECT id FROM mobile_shop.processors WHERE description LIKE '"
+                + updatePhone.getProcessorName() + "'), memorysize = " + updatePhone.getMemorySize() + ", display = '"
                 + updatePhone.getDisplay() + "', camera = '" + updatePhone.getCamera() + "', size = '"
                 + updatePhone.getSize() + "', price = " + updatePhone.getPrice() + " WHERE mobile_shop.phone.id = "
                 + updatePhone.getId() +";";
         return data.makeQuery(queryString);
+    }
+
+    @Override
+    public Integer deletePhone(String findPhone, Boolean cascade) {
+        String queryString = "";
+        if (cascade) {
+            queryString ="DELETE FROM mobile_shop.transaction WHERE goodid = "
+                    + "(SELECT id FROM mobile_shop.phone WHERE name LIKE '" + findPhone + "');\n";
+        }
+        queryString += "DELETE FROM mobile_shop.phone WHERE name LIKE '" + findPhone + "';";
+        return data.makeQuery(queryString);
+    }
+
+    @Override
+    public List<Phone> listPhones() {
+        String queryString ="SELECT * FROM mobile_shop.phone;";
+        return data.listPhonesQuery(queryString);
     }
 }

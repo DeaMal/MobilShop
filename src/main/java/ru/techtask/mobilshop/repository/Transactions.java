@@ -6,7 +6,14 @@ import java.util.List;
 
 public interface Transactions {
     Integer addTransaction(Transaction newTransaction);
-    List<String> getListTransactions();
+
+    List<String> getListTransactionNames();
+
     Transaction getTransaction(Integer transactionId);
+
     Integer updateTransaction(Transaction updateTransaction);
+
+    Integer deleteTransaction(Integer transactionId);
+
+    List<Transaction> listTransactions();
 }

@@ -1,5 +1,3 @@
-drop schema if exists mobile_shop cascade;
-
 create schema if not exists mobile_shop;
 
 create table if not exists mobile_shop.processors (

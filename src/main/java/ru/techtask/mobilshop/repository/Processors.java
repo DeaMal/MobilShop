@@ -4,7 +4,12 @@ import java.util.List;
 
 public interface Processors {
     List<String> listProcessors();
-    Integer addProcessor(String processor);
-    Integer getProcessorId(String processor);
-    Integer updateProcessor(Integer processorId, String processor);
+
+    Integer addProcessor(String processorName);
+
+    Integer getProcessorId(String processorName);
+
+    Integer updateProcessor(Integer processorId, String processorName);
+
+    Integer deleteProcessor(String processorName, Boolean cascade);
 }

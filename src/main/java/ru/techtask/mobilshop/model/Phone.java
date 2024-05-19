@@ -14,4 +14,11 @@ public class Phone {
     String camera;
     String size;
     Integer price;
+    String processorName;
+
+    @Override
+    public String toString() {
+        return "{id:" + id + ", name:'" + name + "', " + "processorId:" + processorId + ", memorySize:" + memorySize
+                + ", display:" + display + ", camera:" + camera + ", size:" + size + ", price:" + price + "}";
+    }
 }

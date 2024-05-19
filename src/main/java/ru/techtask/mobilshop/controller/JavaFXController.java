@@ -1,15 +1,16 @@
 package ru.techtask.mobilshop.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import lombok.extern.slf4j.Slf4j;
 import ru.techtask.mobilshop.model.Phone;
 import ru.techtask.mobilshop.model.Transaction;
 import ru.techtask.mobilshop.repository.*;
+
 import java.util.Objects;
 
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static ru.techtask.mobilshop.Application.dataBaseConnect;
 import static ru.techtask.mobilshop.Application.dataBaseInit;
 import static ru.techtask.mobilshop.utils.Utils.convertStringToTimestamp;
 import static ru.techtask.mobilshop.utils.Utils.tryParse;
@@ -115,56 +116,92 @@ public class JavaFXController {
     @FXML
     private Label updateProcessorId;
 
+    @FXML
+    private ChoiceBox<String> deleteChoicePhone;
+
+    @FXML
+    private ChoiceBox<String> deleteChoiceProcessor;
+
+    @FXML
+    private ChoiceBox<String> deleteChoiceTransaction;
+
+    @FXML
+    private CheckBox deletePhoneCheckBox;
+
+    @FXML
+    private CheckBox deleteProcessorCheckBox;
+
+    @FXML
+    private ListView<String> readPhonesList;
+
+    @FXML
+    private ListView<String> readProcessorsList;
+
+    @FXML
+    private ListView<String> readTransactionsList;
+
     private final Processors processors = new ProcessorsImpl();
     private final Phones phones = new PhonesImpl();
     private final Transactions transactions = new TransactionsImpl();
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
-
-    @FXML
-    protected void onInitButtonClick() {
-        dataBaseInit(baseUrl.getText(), baseUser.getText(), basePassword.getText());
-        updateChoiceBoxProcessors();
-        updateChoiceBoxTransactionPhone();
-        updateChoiceTransaction();
+    void onConnectButtonClick() {
+        dataBaseConnect(baseUrl.getText(), baseUser.getText(), basePassword.getText());
         setChoiceBoxStatus();
+        refresh();
         welcomeText.setText("DataBase connect complete!");
     }
 
     @FXML
+    void onInitButtonClick() {
+        dataBaseInit();
+        refresh();
+        welcomeText.setText("DataBase clean and initialization complete!");
+    }
+
+    void refresh() {
+        updateChoiceBoxProcessors();
+        updateChoiceBoxTransactionPhone();
+        updateChoiceTransaction();
+    }
+
+    @FXML
     void onAddProcessorButtonClick() {
-        log.info("AddProcessor: {}", addProcessor.getText());
-        if (Objects.nonNull(processors.addProcessor(addProcessor.getText()))) {
-            updateChoiceBoxProcessors();
-            log.info("Processor added: {}", addProcessor.getText());
-            welcomeText.setText("Processor add success!");
-        } else {
-            log.info("Error adding processor: {}", addProcessor.getText());
-            welcomeText.setText("Error adding processor!");
+        if (!addProcessor.getText().isEmpty()) {
+            log.info("AddProcessor: {}", addProcessor.getText());
+            if (Objects.nonNull(processors.addProcessor(addProcessor.getText()))) {
+                updateChoiceBoxProcessors();
+                log.info("Processor added: {}", addProcessor.getText());
+                welcomeText.setText("Processor add success!");
+            } else {
+                log.info("Error adding processor: {}", addProcessor.getText());
+                welcomeText.setText("Error adding processor!");
+            }
         }
     }
 
     @FXML
     void onAddPhoneButtonClick() {
-        if (Objects.nonNull(phones.addPhone(phoneBuild()))) {
-            updateChoiceBoxTransactionPhone();
-            welcomeText.setText("Phone add success!");
-        } else {
-            welcomeText.setText("Error phone add!");
+        if (Objects.nonNull(addPhoneProcessor.getValue())) {
+            if (Objects.nonNull(phones.addPhone(phoneBuild()))) {
+                updateChoiceBoxTransactionPhone();
+                welcomeText.setText("Phone add success!");
+            } else {
+                welcomeText.setText("Error phone add!");
+            }
         }
     }
 
     @FXML
     void onAddTransactionButtonClick() {
-        // TO DO Check ARRIVED > SOLD
-        if (Objects.nonNull(transactions.addTransaction(transactionBuild()))) {
-            updateChoiceTransaction();
-            welcomeText.setText("Transaction add success!");
-        } else {
-            welcomeText.setText("Error adding transaction!");
+        if (Objects.nonNull(addTransactionPhone.getValue())) {
+            // TO DO Check ARRIVED > SOLD
+            if (Objects.nonNull(transactions.addTransaction(transactionBuild()))) {
+                updateChoiceTransaction();
+                welcomeText.setText("Transaction add success!");
+            } else {
+                welcomeText.setText("Error adding transaction!");
+            }
         }
     }
 
@@ -176,7 +213,7 @@ public class JavaFXController {
             updatePhoneId.setText(findPhone.getId().toString());
             updatePhoneProcessor.getItems().clear();
             processors.listProcessors().forEach(item -> updatePhoneProcessor.getItems().add(item));
-            updatePhoneProcessor.setValue(updatePhoneProcessor.getItems().get(findPhone.getProcessorId() - 1));
+            updatePhoneProcessor.setValue(findPhone.getProcessorName());
             updatePhoneMemory.setText(findPhone.getMemorySize().toString());
             updatePhoneDisplay.setText(findPhone.getDisplay());
             updatePhoneCamera.setText(findPhone.getCamera());
@@ -187,11 +224,13 @@ public class JavaFXController {
 
     @FXML
     void onUpdatePhoneButtonClick() {
-        if (Objects.nonNull(phones.updatePhone(phoneUpdateBuild()))) {
-            updateChoiceBoxTransactionPhone();
-            welcomeText.setText("Phone update success!");
-        } else {
-            welcomeText.setText("Error phone update!");
+        if (Objects.nonNull(updatePhoneProcessor.getValue())) {
+            if (Objects.nonNull(phones.updatePhone(phoneUpdateBuild()))) {
+                updateChoiceBoxTransactionPhone();
+                welcomeText.setText("Phone update success!");
+            } else {
+                welcomeText.setText("Error phone update!");
+            }
         }
     }
 
@@ -206,11 +245,13 @@ public class JavaFXController {
 
     @FXML
     void onUpdateProcessorButtonClick() {
-        if (Objects.nonNull(processors.updateProcessor(tryParse(updateProcessorId.getText()), updateProcessor.getText()))) {
-            updateChoiceBoxProcessors();
-            welcomeText.setText("Processor update success!");
-        } else {
-            welcomeText.setText("Error update processor!");
+        if (!updateProcessor.getText().isEmpty()) {
+            if (Objects.nonNull(processors.updateProcessor(tryParse(updateProcessorId.getText()), updateProcessor.getText()))) {
+                updateChoiceBoxProcessors();
+                welcomeText.setText("Processor update success!");
+            } else {
+                welcomeText.setText("Error update processor!");
+            }
         }
     }
 
@@ -221,7 +262,7 @@ public class JavaFXController {
             updateTransactionId.setText(findTransaction.getId().toString());
             updateTransactionPhone.getItems().clear();
             phones.listPhoneNames().forEach(item -> updateTransactionPhone.getItems().add(item));
-            updateTransactionPhone.setValue(updateTransactionPhone.getItems().get(findTransaction.getGoodId() - 1));
+            updateTransactionPhone.setValue(findTransaction.getPhoneName());
             updateTransactionAmount.setText(findTransaction.getAmount().toString());
             updateTransactionStatus.setValue(findTransaction.getStatus());
             updateTransactionData.setText(findTransaction.getData().toString());
@@ -230,18 +271,76 @@ public class JavaFXController {
 
     @FXML
     void onUpdateTransactionButtonClick() {
-        if (Objects.nonNull(transactions.updateTransaction(transactionUpdateBuild()))) {
-            updateChoiceTransaction();
-            welcomeText.setText("Transaction update success!");
-        } else {
-            welcomeText.setText("Error transaction update!");
+        if (Objects.nonNull(updateTransactionPhone.getValue())) {
+            if (Objects.nonNull(transactions.updateTransaction(transactionUpdateBuild()))) {
+                updateChoiceTransaction();
+                welcomeText.setText("Transaction update success!");
+            } else {
+                welcomeText.setText("Error transaction update!");
+            }
         }
+    }
+
+    @FXML
+    void onDeletePhoneButtonClick() {
+        if (Objects.nonNull(deleteChoicePhone.getValue())) {
+            if (Objects.nonNull(phones.deletePhone(deleteChoicePhone.getValue(), deletePhoneCheckBox.isSelected()))) {
+                updateChoiceBoxTransactionPhone();
+                updateChoiceTransaction();
+                welcomeText.setText("Phone delete success!");
+            } else {
+                welcomeText.setText("Error Phone delete!");
+            }
+        }
+    }
+
+    @FXML
+    void onDeleteProcessorButtonClick() {
+        if (Objects.nonNull(deleteChoiceProcessor.getValue())) {
+            if (Objects.nonNull(processors.deleteProcessor(deleteChoiceProcessor.getValue(), deleteProcessorCheckBox.isSelected()))) {
+                refresh();
+                welcomeText.setText("Processor delete success!");
+            } else {
+                welcomeText.setText("Error Processor delete!");
+            }
+        }
+    }
+
+    @FXML
+    void onDeleteTransactionButtonClick() {
+        if (Objects.nonNull(deleteChoiceTransaction.getValue())) {
+            Integer findTransaction = tryParse(deleteChoiceTransaction.getValue().split(" ")[0]);
+            if (Objects.nonNull(transactions.deleteTransaction(findTransaction))) {
+                updateChoiceTransaction();
+                welcomeText.setText("Transaction delete success!");
+            } else {
+                welcomeText.setText("Error transaction delete!");
+            }
+        }
+    }
+
+    @FXML
+    void onReadPhoneButtonClick() {
+        readPhonesList.getItems().clear();
+        phones.listPhones().forEach(item -> readPhonesList.getItems().add(item.toString()));
+    }
+
+    @FXML
+    void onReadProcessorsButtonClick() {
+        readProcessorsList.getItems().clear();
+        processors.listProcessors().forEach(item -> readProcessorsList.getItems().add(item));
+    }
+
+    @FXML
+    void onReadTransactionsButtonClick() {
+        readTransactionsList.getItems().clear();
+        transactions.listTransactions().forEach(item -> readTransactionsList.getItems().add(item.toString()));
     }
 
     Phone phoneBuild() throws NumberFormatException {
         return Phone.builder()
                 .name(addPhoneName.getText())
-                .processorId(addPhoneProcessor.getSelectionModel().getSelectedIndex() + 1)
+                .processorName(addPhoneProcessor.getValue())
                 .memorySize(tryParse(addPhoneMemory.getText()))
                 .display(addPhoneDisplay.getText())
                 .camera(addPhoneCamera.getText())
@@ -254,7 +353,7 @@ public class JavaFXController {
         return Phone.builder()
                 .id(tryParse(updatePhoneId.getText()))
                 .name(updatePhoneName.getText())
-                .processorId(updatePhoneProcessor.getSelectionModel().getSelectedIndex() + 1)
+                .processorName(updatePhoneProcessor.getValue())
                 .memorySize(tryParse(updatePhoneMemory.getText()))
                 .display(updatePhoneDisplay.getText())
                 .camera(updatePhoneCamera.getText())
@@ -265,7 +364,7 @@ public class JavaFXController {
 
     Transaction transactionBuild() throws NumberFormatException {
         return Transaction.builder()
-                .goodId(addTransactionPhone.getSelectionModel().getSelectedIndex() + 1)
+                .phoneName(addTransactionPhone.getValue())
                 .amount(tryParse(addTransactionAmount.getText()))
                 .status(addTransactionStatus.getValue())
                 .build();
@@ -274,7 +373,7 @@ public class JavaFXController {
     Transaction transactionUpdateBuild() throws NumberFormatException {
         return Transaction.builder()
                 .id(tryParse(updateTransactionId.getText()))
-                .goodId(updateTransactionPhone.getSelectionModel().getSelectedIndex() + 1)
+                .phoneName(updateTransactionPhone.getValue())
                 .amount(tryParse(updateTransactionAmount.getText()))
                 .status(updateTransactionStatus.getValue())
                 .data(convertStringToTimestamp(updateTransactionData.getText()))
@@ -284,31 +383,58 @@ public class JavaFXController {
     void updateChoiceBoxProcessors() {
         addPhoneProcessor.getItems().clear();
         updateChoiceProcessor.getItems().clear();
+        deleteChoiceProcessor.getItems().clear();
         processors.listProcessors().forEach(item -> {
             addPhoneProcessor.getItems().add(item);
             updateChoiceProcessor.getItems().add(item);
+            deleteChoiceProcessor.getItems().add(item);
         });
-        addPhoneProcessor.setValue(addPhoneProcessor.getItems().get(0));
-        updateChoiceProcessor.setValue(updateChoiceProcessor.getItems().get(0));
+        if (isNotEmpty(addPhoneProcessor.getItems())) {
+            addPhoneProcessor.setValue(addPhoneProcessor.getItems().get(0));
+        }
+        if (isNotEmpty(updateChoiceProcessor.getItems())) {
+            updateChoiceProcessor.setValue(updateChoiceProcessor.getItems().get(0));
+        }
+        if (isNotEmpty(deleteChoiceProcessor.getItems())) {
+            deleteChoiceProcessor.setValue(deleteChoiceProcessor.getItems().get(0));
+        }
     }
 
     void updateChoiceBoxTransactionPhone() {
         addTransactionPhone.getItems().clear();
         updateChoicePhone.getItems().clear();
         updateTransactionPhone.getItems().clear();
+        deleteChoicePhone.getItems().clear();
         phones.listPhoneNames().forEach(item -> {
             addTransactionPhone.getItems().add(item);
+            if(Objects.isNull(addTransactionPhone.getValue())) {
+                addTransactionPhone.setValue(item);
+            }
             updateChoicePhone.getItems().add(item);
+            if (Objects.isNull(updateChoicePhone.getValue())) {
+                updateChoicePhone.setValue(item);
+            }
             updateTransactionPhone.getItems().add(item);
+            deleteChoicePhone.getItems().add(item);
+            if (Objects.isNull(deleteChoicePhone.getValue())) {
+                deleteChoicePhone.setValue(item);
+            }
         });
-        addTransactionPhone.setValue(addTransactionPhone.getItems().get(0));
-        updateChoicePhone.setValue(updateChoicePhone.getItems().get(0));
     }
 
     void updateChoiceTransaction() {
         updateChoiceTransaction.getItems().clear();
-        transactions.getListTransactions().forEach(item -> updateChoiceTransaction.getItems().add(item));
-        updateChoiceTransaction.setValue(updateChoiceTransaction.getItems().get(0));
+        deleteChoiceTransaction.getItems().clear();
+        transactions.getListTransactionNames().forEach(item -> {
+            updateChoiceTransaction.getItems().add(item);
+            deleteChoiceTransaction.getItems().add(item);
+        });
+        if (isNotEmpty(updateChoiceTransaction.getItems())) {
+            updateChoiceTransaction.setValue(updateChoiceTransaction.getItems().get(0));
+        }
+        if (isNotEmpty(deleteChoiceTransaction.getItems())) {
+            deleteChoiceTransaction.setValue(deleteChoiceTransaction.getItems().get(0));
+        }
     }
 
     void setChoiceBoxStatus() {

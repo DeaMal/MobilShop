@@ -21,10 +21,16 @@ public class Application extends javafx.application.Application {
         launch();
     }
 
-    public static void dataBaseInit(String baseURL, String baseUser, String basePassword) {
+    public static void dataBaseInit() {
+        var dataBase = DataBaseController.getInstance();
+        dataBase.fillData("ru/techtask/mobilshop/drop.sql");
+        dataBase.fillData("ru/techtask/mobilshop/schema.sql");
+        dataBase.fillData("ru/techtask/mobilshop/data.sql");
+    }
+
+    public static void dataBaseConnect(String baseURL, String baseUser, String basePassword) {
         var dataBase = DataBaseController.getInstance();
         dataBase.init(baseURL, baseUser, basePassword);
         dataBase.fillData("ru/techtask/mobilshop/schema.sql");
-        dataBase.fillData("ru/techtask/mobilshop/data.sql");
     }
 }
