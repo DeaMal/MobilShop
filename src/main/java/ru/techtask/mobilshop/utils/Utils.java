@@ -1,7 +1,6 @@
 package ru.techtask.mobilshop.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ru.techtask.mobilshop.logging.Logger;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -9,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utils {
-    private static final Logger log = LoggerFactory.getLogger(Utils.class);
 
     public static Timestamp convertStringToTimestamp(String strDate) {
         try {
@@ -17,7 +15,7 @@ public class Utils {
             Date date = formatter.parse(strDate);
             return new Timestamp(date.getTime());
         } catch (ParseException e) {
-            System.out.println("Exception :" + e);
+            Logger.logConvertString(strDate);
             return null;
         }
     }
@@ -26,8 +24,8 @@ public class Utils {
         try {
             return Integer.parseInt(text);
         } catch (NumberFormatException e) {
-            log.info("Value is not valid");
-            throw new RuntimeException(e);
+            Logger.logConvertString(text);
+            return null;
         }
     }
 }

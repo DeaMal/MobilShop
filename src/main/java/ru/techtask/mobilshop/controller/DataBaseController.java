@@ -1,6 +1,7 @@
 package ru.techtask.mobilshop.controller;
 
 import lombok.Getter;
+import ru.techtask.mobilshop.logging.Logger;
 import ru.techtask.mobilshop.model.Phone;
 import ru.techtask.mobilshop.model.Transaction;
 
@@ -13,9 +14,13 @@ import java.util.Scanner;
 
 @Getter
 public class DataBaseController {
+    private static final Logger logger = new Logger();
     private static DataBaseController instance;
     private Properties props;
     private String url;
+
+    private static final String SUCCESS = " IS SUCCESS";
+    private static final String FAIL = " IS FAIL";
 
     private DataBaseController(){}
 
@@ -43,15 +48,16 @@ public class DataBaseController {
                 statement.executeUpdate(is.next());
             }
             is.close();
-        } catch (SQLException e) {
+            logger.logFillData(string + SUCCESS);
+        } catch (Exception e) {
+            logger.logFillData(string + FAIL);
             throw new RuntimeException(e);
         }
     }
 
     public Integer makeQuery(String sqlQuery) {
         Integer result = null;
-        try {
-            Connection connection = DriverManager.getConnection(url, props);
+        try (Connection connection = DriverManager.getConnection(url, props)) {
             Statement statement = connection.createStatement();
             if (statement.execute(sqlQuery)) {
                 ResultSet resultSet =  statement.getResultSet();
@@ -60,33 +66,31 @@ public class DataBaseController {
             } else {
                 result = statement.getUpdateCount();
             }
-            connection.close();
+            logger.logMakeQuery(sqlQuery + SUCCESS);
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
+            logger.logMakeQuery(sqlQuery + FAIL);
         }
         return result;
     }
 
     public List<String> listQuery(String queryString) {
         var result = new ArrayList<String>();
-        try {
-            Connection connection = DriverManager.getConnection(url, props);
+        try (Connection connection = DriverManager.getConnection(url, props)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
                 result.add(resultSet.getString(1));
             }
-            connection.close();
+            logger.logListQuery(queryString + SUCCESS);
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
+            logger.logListQuery(queryString + FAIL);
         }
         return result;
     }
 
     public List<Phone> listPhonesQuery(String queryString) {
         var result = new ArrayList<Phone>();
-        try {
-            Connection connection = DriverManager.getConnection(url, props);
+        try (Connection connection = DriverManager.getConnection(url, props)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
@@ -102,16 +106,16 @@ public class DataBaseController {
                         .build();
                 result.add(newPhone);
             }
+            logger.logListPhonesQuery(queryString + SUCCESS);
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
+            logger.logListPhonesQuery(queryString + FAIL);
         }
         return result;
     }
 
     public List<Transaction> listTransactionsQuery(String queryString) {
         var result = new ArrayList<Transaction>();
-        try {
-            Connection connection = DriverManager.getConnection(url, props);
+        try (Connection connection = DriverManager.getConnection(url, props)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
@@ -124,8 +128,9 @@ public class DataBaseController {
                         .build();
                 result.add(newTransaction);
             }
+            logger.logListTransactionsQuery(queryString + SUCCESS);
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
+            logger.logListTransactionsQuery(queryString + FAIL);
         }
         return result;
     }

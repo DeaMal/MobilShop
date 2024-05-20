@@ -1,7 +1,5 @@
 package ru.techtask.mobilshop.repository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.techtask.mobilshop.controller.DataBaseController;
 import ru.techtask.mobilshop.model.Transaction;
 
@@ -9,7 +7,6 @@ import java.sql.*;
 import java.util.List;
 
 public class TransactionsImpl implements Transactions {
-    private static final Logger log = LoggerFactory.getLogger(TransactionsImpl.class);
     private final DataBaseController data = DataBaseController.getInstance();
 
     @Override
@@ -17,7 +14,6 @@ public class TransactionsImpl implements Transactions {
         String queryString = "insert into mobile_shop.transaction(goodid, amount, status) values ("
                 + "(SELECT id FROM mobile_shop.phone WHERE name LIKE '" + newTransaction.getPhoneName() + "'), "
                 + newTransaction.getAmount() + ", '" + newTransaction.getStatus() + "');";
-        log.info(queryString);
         return data.makeQuery(queryString);
     }
 

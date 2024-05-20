@@ -2,7 +2,6 @@ package ru.techtask.mobilshop.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import lombok.extern.slf4j.Slf4j;
 import ru.techtask.mobilshop.model.Phone;
 import ru.techtask.mobilshop.model.Transaction;
 import ru.techtask.mobilshop.repository.*;
@@ -15,7 +14,6 @@ import static ru.techtask.mobilshop.Application.dataBaseInit;
 import static ru.techtask.mobilshop.utils.Utils.convertStringToTimestamp;
 import static ru.techtask.mobilshop.utils.Utils.tryParse;
 
-@Slf4j
 public class JavaFXController {
     @FXML
     private Label welcomeText;
@@ -168,13 +166,10 @@ public class JavaFXController {
     @FXML
     void onAddProcessorButtonClick() {
         if (!addProcessor.getText().isEmpty()) {
-            log.info("AddProcessor: {}", addProcessor.getText());
             if (Objects.nonNull(processors.addProcessor(addProcessor.getText()))) {
                 updateChoiceBoxProcessors();
-                log.info("Processor added: {}", addProcessor.getText());
                 welcomeText.setText("Processor add success!");
             } else {
-                log.info("Error adding processor: {}", addProcessor.getText());
                 welcomeText.setText("Error adding processor!");
             }
         }
