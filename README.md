@@ -1,9 +1,9 @@
 # MobilShop
 Interface and business logic for working with the mobile phone store database.
 
-Maven, PostgreSQL
+Maven, PostgreSQL, REST, Hibernate
 
-Spring Boot Starter, JavaFX, Lombok, Logger, 
+Spring Boot Starter, JavaFX, Lombok, Logger
 
 UX/UI, DAO, Repository, Singleton, CRUD, KISS, DRY, YAGNI
 
@@ -37,6 +37,34 @@ To work with data, use the remaining tabs.
 ![ScreenShot](Screenshot_3.png)
 
 ![ScreenShot](Screenshot_4.png)
+
+## Usage without interface
+
+To perform HTTP requests, you can use the command line tool cURL. Check that you have it installed.
+
+    sudo apt install curl
+
+You can also use **Insomnia**, **Postman** or other similar programs instead of the command line.
+
+In this mode, the parameters specified in the first screenshot are used to connect to the database.
+
+*Example of a request to get a phone by ID:*
+
+    curl -X GET http://localhost:8080/mobilshop/phone?id=1
+
+*Example of a request to get a processor by ID:*
+
+    curl -X GET http://localhost:8080/mobilshop/processor?id=10
+
+*Example of a request to add a new phone:*
+
+    curl -X POST http://localhost:8080/mobilshop/phone/add --json "{\"name\":\"Galactic\",\"processorid\":1,\"memorysize\":348,\"display\":\"12\",\"camera\":\"21.2MP\",\"size\":\"50x50x50\",\"price\":20000}"
+
+> You can use `-H "Content-type:application/json" -d` instead of `--json`
+
+*Example of a request to remove a phone from the database:*
+
+    curl -X DELETE http://localhost:8080/mobilshop/phone/14
 
 ## Remove
 

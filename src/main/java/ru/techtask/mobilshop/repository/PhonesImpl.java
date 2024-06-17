@@ -1,7 +1,7 @@
 package ru.techtask.mobilshop.repository;
 
 import ru.techtask.mobilshop.controller.DataBaseController;
-import ru.techtask.mobilshop.model.Phone;
+import ru.techtask.mobilshop.model.PhoneModel;
 
 import java.sql.*;
 import java.util.List;
@@ -10,7 +10,7 @@ public class PhonesImpl implements Phones {
     private final DataBaseController data = DataBaseController.getInstance();
 
     @Override
-    public Integer addPhone(Phone newPhone) {
+    public Integer addPhone(PhoneModel newPhone) {
         String queryString = "insert into mobile_shop.phone values (default, '" + newPhone.getName()
                 + "', (SELECT id FROM mobile_shop.processors WHERE description LIKE '"
                 + newPhone.getProcessorName() + "'), " + newPhone.getMemorySize() + ", '" + newPhone.getDisplay() +
@@ -25,8 +25,8 @@ public class PhonesImpl implements Phones {
     }
 
     @Override
-    public Phone getPhone(String findPhone) {
-        Phone result = null;
+    public PhoneModel getPhone(String findPhone) {
+        PhoneModel result = null;
         String queryString ="SELECT phone.id AS id, name, processorid, memorysize, display, camera, size, price, "
                 + "description FROM mobile_shop.phone join mobile_shop.processors p on p.id = phone.processorid "
                 + "WHERE mobile_shop.phone.name LIKE ?;";
@@ -36,7 +36,7 @@ public class PhonesImpl implements Phones {
             preparedStatement.setString(1, findPhone);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                result = Phone.builder()
+                result = PhoneModel.builder()
                         .id(resultSet.getInt(1))
                         .name(resultSet.getString(2))
                         .processorId(resultSet.getInt(3))
@@ -56,7 +56,7 @@ public class PhonesImpl implements Phones {
     }
 
     @Override
-    public Integer updatePhone(Phone updatePhone) {
+    public Integer updatePhone(PhoneModel updatePhone) {
         String queryString ="UPDATE mobile_shop.phone SET name = '" + updatePhone.getName()
                 + "', processorid = (SELECT id FROM mobile_shop.processors WHERE description LIKE '"
                 + updatePhone.getProcessorName() + "'), memorysize = " + updatePhone.getMemorySize() + ", display = '"
@@ -78,7 +78,7 @@ public class PhonesImpl implements Phones {
     }
 
     @Override
-    public List<Phone> listPhones() {
+    public List<PhoneModel> listPhones() {
         String queryString ="SELECT * FROM mobile_shop.phone;";
         return data.listPhonesQuery(queryString);
     }

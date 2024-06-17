@@ -3,10 +3,13 @@ package ru.techtask.mobilshop;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.techtask.mobilshop.controller.DataBaseController;
 
 import java.io.IOException;
 
+@SpringBootApplication
 public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -18,6 +21,7 @@ public class Application extends javafx.application.Application {
     }
 
     public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
         launch();
     }
 

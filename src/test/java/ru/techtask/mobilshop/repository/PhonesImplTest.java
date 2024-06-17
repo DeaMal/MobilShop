@@ -3,7 +3,7 @@ package ru.techtask.mobilshop.repository;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import ru.techtask.mobilshop.controller.DataBaseController;
-import ru.techtask.mobilshop.model.Phone;
+import ru.techtask.mobilshop.model.PhoneModel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -43,8 +43,8 @@ public class PhonesImplTest {
         }
     }
 
-    private Phone phoneBuilder() {
-        return Phone.builder()
+    private PhoneModel phoneBuilder() {
+        return PhoneModel.builder()
                 .name(TEST_STRING)
                 .processorName(TEST_STRING)
                 .memorySize(ONE)

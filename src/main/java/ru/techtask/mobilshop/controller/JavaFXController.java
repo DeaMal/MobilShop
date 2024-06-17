@@ -2,8 +2,8 @@ package ru.techtask.mobilshop.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import ru.techtask.mobilshop.model.Phone;
-import ru.techtask.mobilshop.model.Transaction;
+import ru.techtask.mobilshop.model.PhoneModel;
+import ru.techtask.mobilshop.model.TransactionModel;
 import ru.techtask.mobilshop.repository.*;
 
 import java.util.Objects;
@@ -203,7 +203,7 @@ public class JavaFXController {
     @FXML
     void onUpdateChoicePhoneButtonClick() {
         if (Objects.nonNull(updateChoicePhone.getValue())) {
-            Phone findPhone = phones.getPhone(updateChoicePhone.getValue());
+            PhoneModel findPhone = phones.getPhone(updateChoicePhone.getValue());
             updatePhoneName.setText(findPhone.getName());
             updatePhoneId.setText(findPhone.getId().toString());
             updatePhoneProcessor.getItems().clear();
@@ -253,7 +253,7 @@ public class JavaFXController {
     @FXML
     void onUpdateChoiceTransactionButtonClick() {
         if (Objects.nonNull(updateChoiceTransaction.getValue())) {
-            Transaction findTransaction = transactions.getTransaction(tryParse(updateChoiceTransaction.getValue().split(" ")[0]));
+            TransactionModel findTransaction = transactions.getTransaction(tryParse(updateChoiceTransaction.getValue().split(" ")[0]));
             updateTransactionId.setText(findTransaction.getId().toString());
             updateTransactionPhone.getItems().clear();
             phones.listPhoneNames().forEach(item -> updateTransactionPhone.getItems().add(item));
@@ -332,8 +332,8 @@ public class JavaFXController {
         transactions.listTransactions().forEach(item -> readTransactionsList.getItems().add(item.toString()));
     }
 
-    Phone phoneBuild() throws NumberFormatException {
-        return Phone.builder()
+    PhoneModel phoneBuild() throws NumberFormatException {
+        return PhoneModel.builder()
                 .name(addPhoneName.getText())
                 .processorName(addPhoneProcessor.getValue())
                 .memorySize(tryParse(addPhoneMemory.getText()))
@@ -344,8 +344,8 @@ public class JavaFXController {
                 .build();
     }
 
-    Phone phoneUpdateBuild() throws NumberFormatException {
-        return Phone.builder()
+    PhoneModel phoneUpdateBuild() throws NumberFormatException {
+        return PhoneModel.builder()
                 .id(tryParse(updatePhoneId.getText()))
                 .name(updatePhoneName.getText())
                 .processorName(updatePhoneProcessor.getValue())
@@ -357,16 +357,16 @@ public class JavaFXController {
                 .build();
     }
 
-    Transaction transactionBuild() throws NumberFormatException {
-        return Transaction.builder()
+    TransactionModel transactionBuild() throws NumberFormatException {
+        return TransactionModel.builder()
                 .phoneName(addTransactionPhone.getValue())
                 .amount(tryParse(addTransactionAmount.getText()))
                 .status(addTransactionStatus.getValue())
                 .build();
     }
 
-    Transaction transactionUpdateBuild() throws NumberFormatException {
-        return Transaction.builder()
+    TransactionModel transactionUpdateBuild() throws NumberFormatException {
+        return TransactionModel.builder()
                 .id(tryParse(updateTransactionId.getText()))
                 .phoneName(updateTransactionPhone.getValue())
                 .amount(tryParse(updateTransactionAmount.getText()))
@@ -433,8 +433,10 @@ public class JavaFXController {
     }
 
     void setChoiceBoxStatus() {
+        addTransactionStatus.getItems().clear();
         addTransactionStatus.getItems().addAll("ARRIVED", "SOLD", "OTHER");
         addTransactionStatus.setValue(addTransactionStatus.getItems().get(0));
+        updateTransactionStatus.getItems().clear();
         updateTransactionStatus.getItems().addAll("ARRIVED", "SOLD", "OTHER");
     }
 }

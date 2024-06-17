@@ -2,10 +2,11 @@ package ru.techtask.mobilshop.model;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.techtask.mobilshop.entity.Phone;
 
 @Builder
 @Data
-public class Phone {
+public class PhoneModel {
     Integer id;
     String name;
     Integer processorId;
@@ -15,6 +16,19 @@ public class Phone {
     String size;
     Integer price;
     String processorName;
+
+    public static PhoneModel toModel(Phone phone) {
+        return PhoneModel.builder()
+                .id(phone.getId())
+                .name(phone.getName())
+                .processorId(phone.getProcessorid())
+                .memorySize(phone.getMemorysize())
+                .display(phone.getDisplay())
+                .camera(phone.getCamera())
+                .size(phone.getSize())
+                .price(phone.getPrice())
+                .build();
+    }
 
     @Override
     public String toString() {

@@ -2,8 +2,8 @@ package ru.techtask.mobilshop.controller;
 
 import lombok.Getter;
 import ru.techtask.mobilshop.logging.Logger;
-import ru.techtask.mobilshop.model.Phone;
-import ru.techtask.mobilshop.model.Transaction;
+import ru.techtask.mobilshop.model.PhoneModel;
+import ru.techtask.mobilshop.model.TransactionModel;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -88,13 +88,13 @@ public class DataBaseController {
         return result;
     }
 
-    public List<Phone> listPhonesQuery(String queryString) {
-        var result = new ArrayList<Phone>();
+    public List<PhoneModel> listPhonesQuery(String queryString) {
+        var result = new ArrayList<PhoneModel>();
         try (Connection connection = DriverManager.getConnection(url, props)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
-                Phone newPhone = Phone.builder()
+                PhoneModel newPhone = PhoneModel.builder()
                         .id(resultSet.getInt(1))
                         .name(resultSet.getString(2))
                         .processorId(resultSet.getInt(3))
@@ -113,13 +113,13 @@ public class DataBaseController {
         return result;
     }
 
-    public List<Transaction> listTransactionsQuery(String queryString) {
-        var result = new ArrayList<Transaction>();
+    public List<TransactionModel> listTransactionsQuery(String queryString) {
+        var result = new ArrayList<TransactionModel>();
         try (Connection connection = DriverManager.getConnection(url, props)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
-                Transaction newTransaction = Transaction.builder()
+                TransactionModel newTransaction = TransactionModel.builder()
                         .id(resultSet.getInt(1))
                         .goodId(resultSet.getInt(2))
                         .amount(resultSet.getInt(3))

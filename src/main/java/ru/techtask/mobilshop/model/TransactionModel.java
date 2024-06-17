@@ -7,13 +7,13 @@ import java.sql.Timestamp;
 
 @Builder
 @Data
-public class Transaction {
+public class TransactionModel {
     Integer id;
     Integer goodId;
-    String phoneName;
     Integer amount;
     String status;
     Timestamp data;
+    String phoneName;
 
     @Override
     public String toString() {

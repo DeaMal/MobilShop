@@ -1,19 +1,19 @@
 package ru.techtask.mobilshop.repository;
 
-import ru.techtask.mobilshop.model.Phone;
+import ru.techtask.mobilshop.model.PhoneModel;
 
 import java.util.List;
 
 public interface Phones {
     List<String> listPhoneNames();
 
-    Integer addPhone(Phone newPhone);
+    Integer addPhone(PhoneModel newPhone);
 
-    Phone getPhone(String findPhone);
+    PhoneModel getPhone(String findPhone);
 
-    Integer updatePhone(Phone updatePhone);
+    Integer updatePhone(PhoneModel updatePhone);
 
     Integer deletePhone(String findPhone, Boolean cascade);
 
-    List<Phone> listPhones();
+    List<PhoneModel> listPhones();
 }
