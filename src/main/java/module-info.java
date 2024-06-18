@@ -12,6 +12,7 @@ module ru.techtask.mobilshop {
     requires spring.data.commons;
     requires spring.beans;
     requires spring.context;
+    requires org.hibernate.orm.core;
 
     opens ru.techtask.mobilshop to javafx.fxml;
     exports ru.techtask.mobilshop;

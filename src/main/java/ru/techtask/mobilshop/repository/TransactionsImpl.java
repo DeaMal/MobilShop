@@ -28,7 +28,7 @@ public class TransactionsImpl implements Transactions {
     @Override
     public TransactionModel getTransaction(Integer transactionId) {
         TransactionModel result = null;
-        String queryString ="SELECT transaction.id AS id, goodid, amount, status, \"Date\", name "
+        String queryString ="SELECT transaction.id AS id, goodid, amount, status, \"date\", name "
                 + "FROM mobile_shop.transaction JOIN mobile_shop.phone p on p.id = transaction.goodid "
                 + "WHERE mobile_shop.transaction.id = ?;";
         try {
@@ -42,7 +42,7 @@ public class TransactionsImpl implements Transactions {
                         .goodId(resultSet.getInt(2))
                         .amount(resultSet.getInt(3))
                         .status(resultSet.getString(4))
-                        .data(resultSet.getTimestamp(5))
+                        .date(resultSet.getTimestamp(5))
                         .phoneName(resultSet.getString(6))
                         .build();
             }
@@ -58,7 +58,7 @@ public class TransactionsImpl implements Transactions {
         String queryString ="UPDATE mobile_shop.transaction SET goodid = "
                 + "(SELECT id FROM mobile_shop.phone WHERE name LIKE '" + updateTransaction.getPhoneName()
                 + "'), amount = " + updateTransaction.getAmount() + ", status = '" + updateTransaction.getStatus()
-                + "', \"Date\" = '" + updateTransaction.getData() + "' WHERE mobile_shop.transaction.id = "
+                + "', \"date\" = '" + updateTransaction.getDate() + "' WHERE mobile_shop.transaction.id = "
                 + updateTransaction.getId() +";";
         return data.makeQuery(queryString);
     }

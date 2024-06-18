@@ -11,10 +11,10 @@ public class PhonesImpl implements Phones {
 
     @Override
     public Integer addPhone(PhoneModel newPhone) {
-        String queryString = "insert into mobile_shop.phone values (default, '" + newPhone.getName()
-                + "', (SELECT id FROM mobile_shop.processors WHERE description LIKE '"
-                + newPhone.getProcessorName() + "'), " + newPhone.getMemorySize() + ", '" + newPhone.getDisplay() +
-                "', '" + newPhone.getCamera() + "', '" + newPhone.getSize() + "', " + newPhone.getPrice() + ")";
+        String queryString = "insert into mobile_shop.phone(name, processorid, memorysize, display, camera, size, price) values ('"
+                + newPhone.getName() + "', (SELECT id FROM mobile_shop.processors WHERE description LIKE '"
+                + newPhone.getProcessorName() + "'), " + newPhone.getMemorySize() + ", '" + newPhone.getDisplay()
+                + "', '" + newPhone.getCamera() + "', '" + newPhone.getSize() + "', " + newPhone.getPrice() + ")";
         return data.makeQuery(queryString);
     }
 

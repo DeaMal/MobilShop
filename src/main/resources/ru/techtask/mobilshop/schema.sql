@@ -21,5 +21,5 @@ create table if not exists mobile_shop.transaction (
     GoodId integer not null references mobile_shop.phone(id),
     Amount numeric not null,
     Status varchar not null check (Status IN ('ARRIVED','SOLD','OTHER')),
-    "Date" timestamp default current_timestamp::TIMESTAMP(0)
+    "date" timestamp not null default current_timestamp::TIMESTAMP(0)
 );

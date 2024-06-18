@@ -94,15 +94,16 @@ public class DataBaseController {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
+//                result.add(Q2Obj.fromResultSet(resultSet, PhoneModel.class));
                 PhoneModel newPhone = PhoneModel.builder()
-                        .id(resultSet.getInt(1))
-                        .name(resultSet.getString(2))
-                        .processorId(resultSet.getInt(3))
-                        .memorySize(resultSet.getInt(4))
-                        .display(resultSet.getString(5))
-                        .camera(resultSet.getString(6))
-                        .size(resultSet.getString(7))
-                        .price(resultSet.getInt(8))
+                        .id(resultSet.getInt("id"))
+                        .name(resultSet.getString("name"))
+                        .processorId(resultSet.getInt("processorid"))
+                        .memorySize(resultSet.getInt("memorysize"))
+                        .display(resultSet.getString("display"))
+                        .camera(resultSet.getString("camera"))
+                        .size(resultSet.getString("size"))
+                        .price(resultSet.getInt("price"))
                         .build();
                 result.add(newPhone);
             }
@@ -120,11 +121,11 @@ public class DataBaseController {
             ResultSet resultSet = statement.executeQuery(queryString);
             while (resultSet.next()) {
                 TransactionModel newTransaction = TransactionModel.builder()
-                        .id(resultSet.getInt(1))
-                        .goodId(resultSet.getInt(2))
-                        .amount(resultSet.getInt(3))
-                        .status(resultSet.getString(4))
-                        .data(resultSet.getTimestamp(5))
+                        .id(resultSet.getInt("id"))
+                        .goodId(resultSet.getInt("goodid"))
+                        .amount(resultSet.getInt("amount"))
+                        .status(resultSet.getString("status"))
+                        .date(resultSet.getTimestamp("date"))
                         .build();
                 result.add(newTransaction);
             }

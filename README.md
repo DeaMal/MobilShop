@@ -56,15 +56,39 @@ In this mode, the parameters specified in the first screenshot are used to conne
 
     curl -X GET http://localhost:8080/mobilshop/processor?id=10
 
+*Example of a request to get a transaction by ID:*
+
+    curl -X GET http://localhost:8080/mobilshop/transaction?id=8
+
 *Example of a request to add a new phone:*
 
     curl -X POST http://localhost:8080/mobilshop/phone/add --json "{\"name\":\"Galactic\",\"processorid\":1,\"memorysize\":348,\"display\":\"12\",\"camera\":\"21.2MP\",\"size\":\"50x50x50\",\"price\":20000}"
+
+*Example of a request to add a new processor:*
+
+    curl -X POST http://localhost:8080/mobilshop/processor/add --json "{\"description\":\"Baikal\"}"
+
+*Example of a request to add a new transaction:*
+
+    curl -X POST http://localhost:8080/mobilshop/transaction/add --json "{\"goodid\":1,\"amount\":10,\"status\":\"ARRIVED\",\"date\":\"2024-06-15T21:33:13.000\"}"
+
+*or without 'date' to set the current time*
+
+    curl -X POST http://localhost:8080/mobilshop/transaction/add --json "{\"goodid\":2,\"amount\":4,\"status\":\"SOLD\"}"
 
 > You can use `-H "Content-type:application/json" -d` instead of `--json`
 
 *Example of a request to remove a phone from the database:*
 
     curl -X DELETE http://localhost:8080/mobilshop/phone/14
+
+*Example of a request to remove a processor from the database:*
+
+    curl -X DELETE http://localhost:8080/mobilshop/processor/7
+
+*Example of a request to remove a transaction from the database:*
+
+    curl -X DELETE http://localhost:8080/mobilshop/transaction/15
 
 ## Remove
 

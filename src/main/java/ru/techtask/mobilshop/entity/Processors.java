@@ -2,17 +2,17 @@ package ru.techtask.mobilshop.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
 @Data
+@Entity
+@Table(name = "processors")
 public class Processors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "description", nullable = false, unique = true)
     private String description;
 
     public Processors() {

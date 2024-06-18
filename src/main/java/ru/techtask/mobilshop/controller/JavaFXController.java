@@ -260,7 +260,7 @@ public class JavaFXController {
             updateTransactionPhone.setValue(findTransaction.getPhoneName());
             updateTransactionAmount.setText(findTransaction.getAmount().toString());
             updateTransactionStatus.setValue(findTransaction.getStatus());
-            updateTransactionData.setText(findTransaction.getData().toString());
+            updateTransactionData.setText(findTransaction.getDate().toString());
         }
     }
 
@@ -371,7 +371,7 @@ public class JavaFXController {
                 .phoneName(updateTransactionPhone.getValue())
                 .amount(tryParse(updateTransactionAmount.getText()))
                 .status(updateTransactionStatus.getValue())
-                .data(convertStringToTimestamp(updateTransactionData.getText()))
+                .date(convertStringToTimestamp(updateTransactionData.getText()))
                 .build();
     }
 

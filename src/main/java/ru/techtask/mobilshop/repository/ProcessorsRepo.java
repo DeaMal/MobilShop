@@ -4,4 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import ru.techtask.mobilshop.entity.Processors;
 
 public interface ProcessorsRepo extends CrudRepository<Processors, Integer> {
+    Processors findByDescription(String description);
 }
