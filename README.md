@@ -90,6 +90,10 @@ In this mode, the parameters specified in the first screenshot are used to conne
 
     curl -X DELETE http://localhost:8080/mobilshop/transaction/15
 
+*Example of a request to update a phone by ID:*
+
+    curl -X PUT http://localhost:8080/mobilshop/phone/update?id=2 --json "{\"name\":\"Galactic3\",\"processorid\":1,\"memorysize\":256,\"display\":\"5\",\"camera\":\"21.2MP\",\"size\":\"150x50x5\",\"price\":25000}"
+
 ## Remove
 
     rm -r target

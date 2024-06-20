@@ -9,6 +9,7 @@ import ru.techtask.mobilshop.model.PhoneModel;
 import ru.techtask.mobilshop.repository.PhoneRepo;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PhoneService {
@@ -30,5 +31,15 @@ public class PhoneService {
     public Integer deletePhoneById(Integer phoneId) {
         phoneRepo.deleteById(phoneId);
         return phoneId;
+    }
+
+    public Phone updatePhone(Phone phone, Integer id) throws ItemAlreadyExistException {
+        phoneRepo.findById(id).orElseThrow(() -> new ItemNotFoundException("Phone not found"));
+        Integer phoneIdUniqueName = Optional.ofNullable(phoneRepo.findByName(phone.getName())).map(Phone::getId).orElse(id);
+        if (!Objects.equals(phoneIdUniqueName, id)) {
+            throw new ItemAlreadyExistException("Phone with this name already exist");
+        }
+        phone.setId(id);
+        return phoneRepo.save(phone);
     }
 }

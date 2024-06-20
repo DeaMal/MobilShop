@@ -56,7 +56,16 @@ public class RestDBController {
         }
     }
 
-//    @PatchMapping
+    @PutMapping("/phone/update")
+    public ResponseEntity updatePhone(@RequestBody Phone phone, @RequestParam Integer id) {
+        try {
+            return ResponseEntity.ok("Phone '" + phoneService.updatePhone(phone, id).getName() + "' update successfully");
+        } catch (ItemNotFoundException | ItemAlreadyExistException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error update a phone: " + e.getMessage());
+        }
+    }
 
     @PostMapping("/processor/add")
     public ResponseEntity addNewProcessor(@RequestBody Processors processor) {
