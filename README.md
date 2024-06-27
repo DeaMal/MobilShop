@@ -94,6 +94,18 @@ In this mode, the parameters specified in the first screenshot are used to conne
 
     curl -X PUT http://localhost:8080/mobilshop/phone/update?id=2 --json "{\"name\":\"Galactic3\",\"processorid\":1,\"memorysize\":256,\"display\":\"5\",\"camera\":\"21.2MP\",\"size\":\"150x50x5\",\"price\":25000}"
 
+*Example of a request to update a processor by ID:*
+
+    curl -X PUT http://localhost:8080/mobilshop/processor/update?id=1 --json "{\"description\":\"Baikal2\"}"
+
+*Example of a request to update a transaction by ID:*
+
+    curl -X PUT http://localhost:8080/mobilshop/transaction/update?id=1 --json "{\"goodid\":3,\"amount\":11,\"status\":\"OTHER\",\"date\":\"2024-06-15T21:33:13.000\"}"
+
+*or without 'date' to set the current time*
+
+    curl -X PUT http://localhost:8080/mobilshop/transaction/update?id=1 --json "{\"goodid\":3,\"amount\":6,\"status\":\"ARRIVED\"}"
+
 ## Remove
 
     rm -r target

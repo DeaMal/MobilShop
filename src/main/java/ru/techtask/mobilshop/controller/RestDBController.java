@@ -98,6 +98,17 @@ public class RestDBController {
         }
     }
 
+    @PutMapping("/processor/update")
+    public ResponseEntity updateProcessor(@RequestBody Processors processor, @RequestParam Integer id) {
+        try {
+            return ResponseEntity.ok("Processor '" + processorsService.updateProcessor(processor, id).getDescription() + "' update successfully");
+        } catch (ItemNotFoundException | ItemAlreadyExistException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error update a processor: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/transaction/add")
     public ResponseEntity addNewTransaction(@RequestBody Transaction transaction) {
         try {
@@ -124,6 +135,17 @@ public class RestDBController {
             return ResponseEntity.ok("Transaction with id " + transactionService.deleteTransactionById(id) + " successfully deleted");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error delete transaction: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/transaction/update")
+    public ResponseEntity updateTransaction(@RequestBody Transaction transaction, @RequestParam Integer id) {
+        try {
+            return ResponseEntity.ok(transactionService.updateTransaction(transaction, id) + "' update successfully");
+        } catch (ItemNotFoundException | ItemAlreadyExistException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error update a transaction: " + e.getMessage());
         }
     }
 }
